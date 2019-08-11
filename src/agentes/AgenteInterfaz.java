@@ -5,6 +5,7 @@
  */
 package agentes;
 
+import bd.MySql;
 import extra.ButtonColumn;
 import interfaz.FrameIngresarSalon;
 import interfaz.FramePrincipal;
@@ -25,6 +26,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -40,6 +45,7 @@ import ontology.Horario;
 import ontology.Reconocimiento;
 import ontology.Salon;
 import ontology.Usuario;
+
 
 /**
  *
@@ -180,15 +186,20 @@ public class AgenteInterfaz extends Agent {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 Usuario newUsuario = new Usuario();
+                int cedula = Integer.parseInt(ventanaRegistrarUsuario.inputCedula.getText());
                 String nombre = ventanaRegistrarUsuario.inputNombre.getText();
                 String role = (String) ventanaRegistrarUsuario.rolInput.getSelectedItem();
                 String facultad = (String) ventanaRegistrarUsuario.facultadInput.getSelectedItem();
-                        
+     
+                
+                String Query = "INSERT INTO usuario VALUES ("+cedula+",'"+nombre+"','"+role+"','"+facultad+"')";
+                MySql.Conectar();
+                MySql.ejecutar(Query);
                 if ( nombre.length() > 0 && role.length() > 0 && facultad.length() > 0 ) {
                     ventanaRegistrarUsuario.mensajeLabel.setText("Registrando rostro...");
                     ventanaRegistrarUsuario.progresoRegistrarRostro.setValue(50);
                     ventanaRegistrarUsuario.registrarRostroButton.setEnabled(false);
-                    registrarRostro(1);
+                    registrarRostro(cedula);
                 } else {
                     ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes<br/>de registrar el rostro.</html>");  
                 }
@@ -201,7 +212,14 @@ public class AgenteInterfaz extends Agent {
 
         try {           
             ProcessBuilder pb = new ProcessBuilder("python", "capture.py", String.valueOf(id));
-            pb.directory(new File("G:\\Mi unidad\\UNIVERSIDAD\\Multiagentes\\Proyecto\\FaceRecognition\\py"));
+            
+            //RUTA JOSE
+            //pb.directory(new File("G:\\Mi unidad\\UNIVERSIDAD\\Multiagentes\\Proyecto\\FaceRecognition\\py"));
+            //RUTA ANDRES
+            //pb.directory(new File("\\home\\andres\\jade-face-recognition\\py"));
+            pb.directory(new File("home/andres/jade-face-recognition/py"));
+            
+            
             Process p = pb.start();
             
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
