@@ -8,20 +8,9 @@ import jade.core.*;
 /**
 * Protege name: Asignacion
 * @author ontology bean generator
-* @version 2019/08/11, 01:43:24
+* @version 2019/08/12, 00:32:33
 */
 public class Asignacion implements Concept {
-
-   /**
-* Protege name: fecha
-   */
-   private String fecha;
-   public void setFecha(String value) { 
-    this.fecha=value;
-   }
-   public String getFecha() {
-     return this.fecha;
-   }
 
    /**
 * Protege name: usuario
@@ -54,6 +43,17 @@ public class Asignacion implements Concept {
    }
    public int getId() {
      return this.id;
+   }
+
+   /**
+* Protege name: dia
+   */
+   private String dia;
+   public void setDia(String value) { 
+    this.dia=value;
+   }
+   public String getDia() {
+     return this.dia;
    }
 
    /**

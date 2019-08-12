@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: FaceRecognitionOntology.java
  * @author ontology bean generator
- * @version 2019/08/11, 01:43:24
+ * @version 2019/08/12, 00:32:33
  */
 public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -45,10 +45,10 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String ASIGNACIONCANCELADA_ASIGNACION="asignacion";
     public static final String ASIGNACIONCANCELADA="AsignacionCancelada";
     public static final String ASIGNACION_SALON="salon";
+    public static final String ASIGNACION_DIA="dia";
     public static final String ASIGNACION_ID="id";
     public static final String ASIGNACION_HORA="hora";
     public static final String ASIGNACION_USUARIO="usuario";
-    public static final String ASIGNACION_FECHA="fecha";
     public static final String ASIGNACION="Asignacion";
     public static final String RECONOCIMIENTO_USUARIO="usuario";
     public static final String RECONOCIMIENTO="Reconocimiento";
@@ -62,9 +62,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String USUARIO_ID="id";
     public static final String USUARIO_NOMBRE="nombre";
     public static final String USUARIO_FACULTAD="facultad";
-    public static final String USUARIO_FOTO="foto";
+    public static final String USUARIO_CEDULA="cedula";
     public static final String USUARIO="Usuario";
-    public static final String FACULTAD_ID="id";
     public static final String FACULTAD_NOMBRE="nombre";
     public static final String FACULTAD="Facultad";
     public static final String HORARIO_ASIGNACIONES="asignaciones";
@@ -124,22 +123,21 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     recomendacionSchema.add(RECOMENDACION_ASIGNACIONES, asignacionSchema, 0, ObjectSchema.UNLIMITED);
     horarioSchema.add(HORARIO_ASIGNACIONES, asignacionSchema, 0, ObjectSchema.UNLIMITED);
     facultadSchema.add(FACULTAD_NOMBRE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
-    facultadSchema.add(FACULTAD_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
-    usuarioSchema.add(USUARIO_FOTO, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    usuarioSchema.add(USUARIO_CEDULA, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_FACULTAD, facultadSchema, ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_NOMBRE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_HORARIO, horarioSchema, ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_ROL, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     salonSchema.add(SALON_NUMERO, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
-    salonSchema.add(SALON_BLOQUE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    salonSchema.add(SALON_BLOQUE, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     salonSchema.add(SALON_FACULTAD, facultadSchema, ObjectSchema.OPTIONAL);
     salonSchema.add(SALON_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     reconocimientoSchema.add(RECONOCIMIENTO_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
-    asignacionSchema.add(ASIGNACION_FECHA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_HORA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    asignacionSchema.add(ASIGNACION_DIA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_SALON, salonSchema, ObjectSchema.OPTIONAL);
     asignacionCanceladaSchema.add(ASIGNACIONCANCELADA_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
     solicitarEntradaSchema.add(SOLICITARENTRADA_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);

@@ -8,19 +8,19 @@ import jade.core.*;
 /**
 * Protege name: Usuario
 * @author ontology bean generator
-* @version 2019/08/11, 01:43:24
+* @version 2019/08/12, 00:32:33
 */
 public class Usuario implements Concept {
 
    /**
-* Protege name: foto
+* Protege name: cedula
    */
-   private String foto;
-   public void setFoto(String value) { 
-    this.foto=value;
+   private int cedula;
+   public void setCedula(int value) { 
+    this.cedula=value;
    }
-   public String getFoto() {
-     return this.foto;
+   public int getCedula() {
+     return this.cedula;
    }
 
    /**

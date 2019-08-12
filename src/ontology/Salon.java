@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Salon
 * @author ontology bean generator
-* @version 2019/08/11, 01:43:24
+* @version 2019/08/12, 00:32:33
 */
 public class Salon implements Concept {
 
@@ -26,11 +26,11 @@ public class Salon implements Concept {
    /**
 * Protege name: bloque
    */
-   private String bloque;
-   public void setBloque(String value) { 
+   private int bloque;
+   public void setBloque(int value) { 
     this.bloque=value;
    }
-   public String getBloque() {
+   public int getBloque() {
      return this.bloque;
    }
 

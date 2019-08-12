@@ -300,13 +300,13 @@ public class AgenteInterfaz extends Agent {
         facultad.setNombre("Minas");
         
         Salon salon = new Salon();
-        salon.setBloque("M8");
+        salon.setBloque(8);
         salon.setFacultad(facultad);
         salon.setNumero(201);
         
         Asignacion asignacion = new Asignacion();
         asignacion.setUsuario(usuario);
-        asignacion.setFecha("lunes");
+        asignacion.setDia("lunes");
         asignacion.setHora("8-10");
         asignacion.setSalon(salon);
         
@@ -336,9 +336,9 @@ public class AgenteInterfaz extends Agent {
             Asignacion a = (Asignacion) b;
             String row[] = 
                 {
-                    a.getFecha(),
+                    a.getDia(),
                     a.getHora(),
-                    a.getSalon().getBloque(),
+                    Integer.toString(a.getSalon().getBloque()),
                     Integer.toString(a.getSalon().getNumero()),
                     a.getSalon().getFacultad().getNombre(),
                     "Cancelar"
