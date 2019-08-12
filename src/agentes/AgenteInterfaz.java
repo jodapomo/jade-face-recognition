@@ -219,6 +219,7 @@ public class AgenteInterfaz extends Agent {
                     MySql.Conectar();
                     MySql.ejecutar(Query);
                     ventanaRegistrarUsuario.dispose();
+                    ventanaPrincipal.setVisible(true);
                 } else {
                     ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes<br/>de registrar el rostro.</html>");  
                 }
@@ -233,7 +234,7 @@ public class AgenteInterfaz extends Agent {
             ProcessBuilder pb = new ProcessBuilder("python", "capture.py", String.valueOf(id));
             
             //RUTA JOSE
-            pb.directory(new File("G:\\Mi unidad\\UNIVERSIDAD\\Multiagentes\\Proyecto\\FaceRecognition\\py"));
+            pb.directory(new File("C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py"));
             //RUTA ANDRES
             //pb.directory(new File("\\home\\andres\\jade-face-recognition\\py"));
             //pb.directory(new File("home/andres/jade-face-recognition/py"));

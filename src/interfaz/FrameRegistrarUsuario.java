@@ -74,7 +74,7 @@ public class FrameRegistrarUsuario extends javax.swing.JFrame {
             }
         });
 
-        facultadInput.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Minas", "Artes", "Ciencias" }));
+        facultadInput.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Minas", "Ciencias Humanas", "Ciencias Exactas" }));
         facultadInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 facultadInputActionPerformed(evt);

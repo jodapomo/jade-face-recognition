@@ -97,7 +97,7 @@ public class AgenteReconocimiento extends Agent {
 
         try {           
             ProcessBuilder pb = new ProcessBuilder("python", "reconocimiento.py");
-            pb.directory(new File("G:\\Mi unidad\\UNIVERSIDAD\\Multiagentes\\Proyecto\\FaceRecognition\\py"));
+            pb.directory(new File("C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py"));
             Process p = pb.start();
             
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
