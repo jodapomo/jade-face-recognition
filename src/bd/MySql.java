@@ -22,7 +22,7 @@ public class MySql {
     
     public static String database = "facerecognition";
     public static String user = "root";
-    public static String password = "anorpemysql";
+    public static String password = "";
     public static Connection conexion = null;
     
     public static void Conectar(){

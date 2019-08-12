@@ -191,15 +191,34 @@ public class AgenteInterfaz extends Agent {
                 String role = (String) ventanaRegistrarUsuario.rolInput.getSelectedItem();
                 String facultad = (String) ventanaRegistrarUsuario.facultadInput.getSelectedItem();
      
-                
-                String Query = "INSERT INTO usuario VALUES ("+cedula+",'"+nombre+"','"+role+"','"+facultad+"')";
-                MySql.Conectar();
-                MySql.ejecutar(Query);
                 if ( nombre.length() > 0 && role.length() > 0 && facultad.length() > 0 ) {
                     ventanaRegistrarUsuario.mensajeLabel.setText("Registrando rostro...");
                     ventanaRegistrarUsuario.progresoRegistrarRostro.setValue(50);
                     ventanaRegistrarUsuario.registrarRostroButton.setEnabled(false);
                     registrarRostro(cedula);
+                } else {
+                    ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes<br/>de registrar el rostro.</html>");  
+                }
+            }
+        }); 
+        
+        ventanaRegistrarUsuario.registrarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                Usuario newUsuario = new Usuario();
+                int cedula = Integer.parseInt(ventanaRegistrarUsuario.inputCedula.getText());
+                String nombre = ventanaRegistrarUsuario.inputNombre.getText();
+                String role = (String) ventanaRegistrarUsuario.rolInput.getSelectedItem();
+                String facultad = (String) ventanaRegistrarUsuario.facultadInput.getSelectedItem();
+     
+                
+                
+                if ( nombre.length() > 0 && role.length() > 0 && facultad.length() > 0 ) {
+                    ventanaRegistrarUsuario.mensajeLabel.setText("Registrando usuario...");
+                    String Query = "INSERT INTO usuario VALUES ("+cedula+",'"+nombre+"','"+role+"','"+facultad+"')";
+                    MySql.Conectar();
+                    MySql.ejecutar(Query);
+                    ventanaRegistrarUsuario.dispose();
                 } else {
                     ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes<br/>de registrar el rostro.</html>");  
                 }
@@ -214,10 +233,10 @@ public class AgenteInterfaz extends Agent {
             ProcessBuilder pb = new ProcessBuilder("python", "capture.py", String.valueOf(id));
             
             //RUTA JOSE
-            //pb.directory(new File("G:\\Mi unidad\\UNIVERSIDAD\\Multiagentes\\Proyecto\\FaceRecognition\\py"));
+            pb.directory(new File("G:\\Mi unidad\\UNIVERSIDAD\\Multiagentes\\Proyecto\\FaceRecognition\\py"));
             //RUTA ANDRES
             //pb.directory(new File("\\home\\andres\\jade-face-recognition\\py"));
-            pb.directory(new File("home/andres/jade-face-recognition/py"));
+            //pb.directory(new File("home/andres/jade-face-recognition/py"));
             
             
             Process p = pb.start();
@@ -241,6 +260,7 @@ public class AgenteInterfaz extends Agent {
                             public void run(){
                                 ventanaRegistrarUsuario.mensajeLabel.setText("Rostro registrado correctamente");
                                 ventanaRegistrarUsuario.progresoRegistrarRostro.setValue(100);
+                                ventanaRegistrarUsuario.registrarButton.setEnabled(true);
                             }
                         });
                     } catch (IOException ex) {
