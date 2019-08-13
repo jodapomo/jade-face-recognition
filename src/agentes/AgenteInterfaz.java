@@ -21,6 +21,8 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.util.leap.ArrayList;
+import jade.util.leap.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -38,12 +40,16 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import ontology.Asignacion;
+import ontology.AsignacionCancelada;
+import ontology.AsignarSalon;
+import ontology.CancelarAsignacion;
 import ontology.EnviarRecomendacion;
 import ontology.EnviarReconocimiento;
 import ontology.FaceRecognitionOntology;
 import ontology.Horario;
 import ontology.Recomendacion;
 import ontology.Reconocimiento;
+import ontology.SalonAsignado;
 import ontology.Usuario;
 import ontology.UsuarioLogueado;
 
@@ -62,6 +68,9 @@ public class AgenteInterfaz extends Agent {
     
     private Usuario usuario;
     private Recomendacion recomendacion;
+    
+    DefaultTableModel dmHorario;
+    DefaultTableModel dmRecomendacion;
     
     private final Codec codec = new SLCodec();
     private final Ontology ontologia = FaceRecognitionOntology.getInstance();
@@ -105,6 +114,10 @@ public class AgenteInterfaz extends Agent {
                             escucharReconocimiento(ce);
                         } else if(ce instanceof EnviarRecomendacion) {
                             escucharRecomendacion(ce);
+                        } else if(ce instanceof SalonAsignado) {
+                            manejarAsignacion(ce);
+                        } else if(ce instanceof AsignacionCancelada) {
+                            manejarCancelacion(ce);
                         }
                     } catch (Codec.CodecException | OntologyException ex) {
                         Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,7 +128,6 @@ public class AgenteInterfaz extends Agent {
             }
         } 
     }
-    
     
     private void escucharReconocimiento(ContentElement ce) {
         EnviarReconocimiento enviar = (EnviarReconocimiento) ce;
@@ -377,18 +389,18 @@ public class AgenteInterfaz extends Agent {
         ventanaSistema.volverButton.addActionListener(volverButtonActionListener);
 
         Object[][] data = {};
-        String[] head = {"Fecha", "Hora", "Bloque", "Número", "Facultad", "Acción"};
+        String[] head = {"Id","Fecha", "Hora", "Bloque", "Número", "Facultad", "Acción"};
         
-        DefaultTableModel dmHorario = new DefaultTableModel(data, head);
+        dmHorario = new DefaultTableModel(data, head);
         fillHorarioDataModel(usuario.getHorario(), dmHorario);
         ventanaSistema.horarioTable.setModel(dmHorario);
-        ButtonColumn buttonColumnCancelar = new ButtonColumn(ventanaSistema.horarioTable, cancelar, 5);
+        ButtonColumn buttonColumnCancelar = new ButtonColumn(ventanaSistema.horarioTable, cancelar, 6);
         
         if ( recomendacion != null ) {
-            DefaultTableModel dmRecomendacion = new DefaultTableModel(data, head);
+            dmRecomendacion = new DefaultTableModel(data, head);
             fillRecomendacionDataModel(recomendacion, dmRecomendacion);
             ventanaSistema.recomendacionesTable.setModel(dmRecomendacion);
-            ButtonColumn buttonColumnReservar = new ButtonColumn(ventanaSistema.recomendacionesTable, cancelar, 5);
+            ButtonColumn buttonColumnReservar = new ButtonColumn(ventanaSistema.recomendacionesTable, reservar, 6);
         }
         
         ventanaSistema.nombreLabel.setText(usuario.getNombre());
@@ -405,6 +417,7 @@ public class AgenteInterfaz extends Agent {
             Asignacion a = (Asignacion) b;
             String row[] = 
                 {
+                    Integer.toString(a.getId()),
                     a.getDia(),
                     a.getHora(),
                     Integer.toString(a.getSalon().getBloque()),
@@ -424,6 +437,7 @@ public class AgenteInterfaz extends Agent {
             Asignacion a = (Asignacion) b;
             String row[] = 
                 {
+                    Integer.toString(a.getId()),
                     a.getDia(),
                     a.getHora(),
                     Integer.toString(a.getSalon().getBloque()),
@@ -440,10 +454,119 @@ public class AgenteInterfaz extends Agent {
         {
             JTable table = (JTable)e.getSource();
             int modelRow = Integer.valueOf( e.getActionCommand() );
+            Integer idAsignacion = Integer.parseInt((String) table.getValueAt(modelRow, 0));
+            solicitarCancelacionAsignacion(idAsignacion);
             ((DefaultTableModel)table.getModel()).removeRow(modelRow);
         }
     };
     
+    private void solicitarCancelacionAsignacion(int idAsignacion) {
+        try {
+            ACLMessage mensaje = new ACLMessage();
+            AID r = new AID();
+            r.setLocalName("Gestion");
+            mensaje.setSender(getAID());
+            mensaje.addReceiver(r);
+            mensaje.setLanguage(codec.getName());
+            mensaje.setOntology(ontologia.getName());
+            mensaje.setPerformative(ACLMessage.REQUEST);
+            
+            CancelarAsignacion cancelarAsignacion = new CancelarAsignacion();
+            cancelarAsignacion.setCedula(usuario.getCedula());
+            cancelarAsignacion.setIdAsignacion(idAsignacion);
+            getContentManager().fillContent(mensaje, cancelarAsignacion);
+            send(mensaje);
+        } catch (Codec.CodecException | OntologyException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    Action reservar = new AbstractAction() {
+        public void actionPerformed(ActionEvent e)
+        {
+            JTable table = (JTable)e.getSource();
+            int modelRow = Integer.valueOf( e.getActionCommand() );
+            Integer idAsignacion = Integer.parseInt((String) table.getValueAt(modelRow, 0));
+            solicitarReservarAsignacion(idAsignacion);
+            ((DefaultTableModel)table.getModel()).removeRow(modelRow);
+        }
+    };
+    
+    private void solicitarReservarAsignacion(int idAsignacion) {
+        try {
+            ACLMessage mensaje = new ACLMessage();
+            AID r = new AID();
+            r.setLocalName("Gestion");
+            mensaje.setSender(getAID());
+            mensaje.addReceiver(r);
+            mensaje.setLanguage(codec.getName());
+            mensaje.setOntology(ontologia.getName());
+            mensaje.setPerformative(ACLMessage.REQUEST);
+            
+            AsignarSalon asignarSalon = new AsignarSalon();
+            asignarSalon.setCedula(usuario.getCedula());
+            asignarSalon.setIdAsignacion(idAsignacion);
+            getContentManager().fillContent(mensaje, asignarSalon);
+            send(mensaje);
+        } catch (Codec.CodecException | OntologyException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void manejarAsignacion(ContentElement ce) {
+        SalonAsignado enviar = (SalonAsignado) ce;
+        Asignacion asignacion = enviar.getAsignacion();
+        
+        usuario.getHorario().addAsignaciones(asignacion);
+        
+        recomendacion.setAsignaciones(removeAsignacion(recomendacion.getAsignaciones(), asignacion.getId()));
+        
+        String row[] = 
+            {
+                Integer.toString(asignacion.getId()),
+                asignacion.getDia(),
+                asignacion.getHora(),
+                Integer.toString(asignacion.getSalon().getBloque()),
+                Integer.toString(asignacion.getSalon().getNumero()),
+                asignacion.getSalon().getFacultad(),
+                "Cancelar"
+            };
+        dmHorario.addRow(row);
+    }
+    
+    private void manejarCancelacion(ContentElement ce) {
+        AsignacionCancelada enviar = (AsignacionCancelada) ce;
+        Asignacion asignacion = enviar.getAsignacion();
+        
+        recomendacion.addAsignaciones(asignacion);
+        
+        usuario.getHorario().setAsignaciones(removeAsignacion(usuario.getHorario().getAsignaciones() , asignacion.getId()));
+        
+        String row[] = 
+            {
+                Integer.toString(asignacion.getId()),
+                asignacion.getDia(),
+                asignacion.getHora(),
+                Integer.toString(asignacion.getSalon().getBloque()),
+                Integer.toString(asignacion.getSalon().getNumero()),
+                asignacion.getSalon().getFacultad(),
+                "Reservar"
+            };
+        dmRecomendacion.addRow(row);
+    }
+    
+    private List removeAsignacion(List asignaciones, int idAsignacion) {
+        List newAsignaciones = new ArrayList();
+        
+        for ( int i = 0; i < asignaciones.size(); i ++ ) {
+            if( ((Asignacion)asignaciones.get(i)).getId() != idAsignacion ) {
+                newAsignaciones.add(asignaciones.get(i));
+            }
+        }
+        
+        return newAsignaciones;
+    }
+
     private void setIngresarSalonFrame() {
         ventanaIngresarSalon.volverButton.addActionListener(volverButtonActionListener);
         

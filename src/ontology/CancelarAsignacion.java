@@ -8,30 +8,30 @@ import jade.core.*;
 /**
 * Protege name: CancelarAsignacion
 * @author ontology bean generator
-* @version 2019/08/13, 00:20:21
+* @version 2019/08/13, 00:52:23
 */
 public class CancelarAsignacion implements Predicate {
 
    /**
-* Protege name: usuario
+* Protege name: cedula
    */
-   private Usuario usuario;
-   public void setUsuario(Usuario value) { 
-    this.usuario=value;
+   private int cedula;
+   public void setCedula(int value) { 
+    this.cedula=value;
    }
-   public Usuario getUsuario() {
-     return this.usuario;
+   public int getCedula() {
+     return this.cedula;
    }
 
    /**
-* Protege name: asignacion
+* Protege name: idAsignacion
    */
-   private Asignacion asignacion;
-   public void setAsignacion(Asignacion value) { 
-    this.asignacion=value;
+   private int idAsignacion;
+   public void setIdAsignacion(int value) { 
+    this.idAsignacion=value;
    }
-   public Asignacion getAsignacion() {
-     return this.asignacion;
+   public int getIdAsignacion() {
+     return this.idAsignacion;
    }
 
 }

@@ -28,7 +28,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel1" max="32767" attributes="0"/>
-                  <Component id="jTabbedPane1" max="32767" attributes="0"/>
+                  <Component id="jTabbedPane1" pref="808" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="volverButton" min="-2" pref="87" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -73,7 +73,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="1" pref="587" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="1" pref="803" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -93,7 +93,8 @@
                 <Component class="javax.swing.JTable" name="horarioTable">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="6" rowCount="4">
+                      <Table columnCount="7" rowCount="4">
+                        <Column editable="false" title="Id" type="java.lang.String"/>
                         <Column editable="false" title="Fecha" type="java.lang.String"/>
                         <Column editable="false" title="Hora" type="java.lang.String"/>
                         <Column editable="false" title="Bloque" type="java.lang.String"/>
@@ -165,7 +166,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" alignment="1" pref="587" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="1" pref="803" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -185,7 +186,8 @@
                 <Component class="javax.swing.JTable" name="recomendacionesTable">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="6" rowCount="4">
+                      <Table columnCount="7" rowCount="4">
+                        <Column editable="false" title="Id" type="java.lang.Integer"/>
                         <Column editable="false" title="Fecha" type="java.lang.String"/>
                         <Column editable="false" title="Hora" type="java.lang.String"/>
                         <Column editable="false" title="Bloque" type="java.lang.String"/>

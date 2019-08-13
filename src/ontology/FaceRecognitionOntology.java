@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: FaceRecognitionOntology.java
  * @author ontology bean generator
- * @version 2019/08/13, 00:20:21
+ * @version 2019/08/13, 00:52:23
  */
 public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -25,15 +25,15 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
    // VOCABULARY
     public static final String USUARIOLOGUEADO_USUARIO="usuario";
     public static final String USUARIOLOGUEADO="UsuarioLogueado";
-    public static final String CANCELARASIGNACION_ASIGNACION="asignacion";
-    public static final String CANCELARASIGNACION_USUARIO="usuario";
+    public static final String CANCELARASIGNACION_IDASIGNACION="idAsignacion";
+    public static final String CANCELARASIGNACION_CEDULA="cedula";
     public static final String CANCELARASIGNACION="CancelarAsignacion";
     public static final String SALONASIGNADO_ASIGNACION="asignacion";
     public static final String SALONASIGNADO="SalonAsignado";
     public static final String ENVIARRECONOCIMIENTO_RECONOCIMIENTO="reconocimiento";
     public static final String ENVIARRECONOCIMIENTO="EnviarReconocimiento";
-    public static final String ASIGNARSALON_ASIGNACION="asignacion";
-    public static final String ASIGNARSALON_USUARIO="usuario";
+    public static final String ASIGNARSALON_IDASIGNACION="idAsignacion";
+    public static final String ASIGNARSALON_CEDULA="cedula";
     public static final String ASIGNARSALON="AsignarSalon";
     public static final String ENVIARRECOMENDACION_RECOMENDACION="recomendacion";
     public static final String ENVIARRECOMENDACION="EnviarRecomendacion";
@@ -137,12 +137,12 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     solicitarEntradaSchema.add(SOLICITARENTRADA_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     solicitarEntradaSchema.add(SOLICITARENTRADA_SALON, salonSchema, ObjectSchema.OPTIONAL);
     enviarRecomendacionSchema.add(ENVIARRECOMENDACION_RECOMENDACION, recomendacionSchema, ObjectSchema.OPTIONAL);
-    asignarSalonSchema.add(ASIGNARSALON_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
-    asignarSalonSchema.add(ASIGNARSALON_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
+    asignarSalonSchema.add(ASIGNARSALON_CEDULA, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    asignarSalonSchema.add(ASIGNARSALON_IDASIGNACION, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     enviarReconocimientoSchema.add(ENVIARRECONOCIMIENTO_RECONOCIMIENTO, reconocimientoSchema, ObjectSchema.OPTIONAL);
     salonAsignadoSchema.add(SALONASIGNADO_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
-    cancelarAsignacionSchema.add(CANCELARASIGNACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
-    cancelarAsignacionSchema.add(CANCELARASIGNACION_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
+    cancelarAsignacionSchema.add(CANCELARASIGNACION_CEDULA, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    cancelarAsignacionSchema.add(CANCELARASIGNACION_IDASIGNACION, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     usuarioLogueadoSchema.add(USUARIOLOGUEADO_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
 
     // adding name mappings

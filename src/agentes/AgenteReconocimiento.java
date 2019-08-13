@@ -50,7 +50,7 @@ public class AgenteReconocimiento extends Agent {
         getContentManager().registerLanguage(codec);
         getContentManager().registerOntology(ontologia);
         
-        addBehaviour(new ComportamientoEnviarReconocimiento(this, 6000));
+        addBehaviour(new ComportamientoEnviarReconocimiento(this, 4000));
     }
     
     

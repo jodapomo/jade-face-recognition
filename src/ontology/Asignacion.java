@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Asignacion
 * @author ontology bean generator
-* @version 2019/08/13, 00:20:21
+* @version 2019/08/13, 00:52:23
 */
 public class Asignacion implements Concept {
 
