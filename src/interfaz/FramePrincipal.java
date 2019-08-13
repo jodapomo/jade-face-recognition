@@ -117,7 +117,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(registrarUsuarioButton, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(ingresarSalonButton, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ingresarSalonButton, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
 

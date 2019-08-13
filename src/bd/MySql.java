@@ -8,6 +8,8 @@ package bd;
 import agentes.AgenteInterfaz;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -27,37 +29,52 @@ public class MySql {
     
     public static void Conectar(){
         try {
-                Class.forName("com.mysql.jdbc.Driver");
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
-                }
-        
-  
-                try {
-                    conexion = DriverManager.getConnection("jdbc:mysql://localhost/"+database,user, password);
-                } catch (SQLException ex) {
-                    Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
-                }
-    }
-    
-    
-    public static void ejecutar(String Query){
-        
-        
-        //String Query = "INSERT INTO usuario VALUES ("+cedula+",'"+nombre+"','"+role+"','"+facultad+"')";
-        //System.out.println(Query);
-        Statement st = null;
-        try {
-            st = conexion.createStatement();
-        } catch (SQLException ex) {
-            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            st.execute(Query);
-        } catch (SQLException ex) {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+
+        try {
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost/"+database,user, password);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public static ResultSet ejecutarQuery(String Query){
+        ResultSet executeQuery = null;
+        PreparedStatement st = null;
+        
+        try {
+            st = conexion.prepareStatement(Query);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            executeQuery = st.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return executeQuery;
+    }
+    
+    public static void ejecutarUpdate(String Query){
+        PreparedStatement st = null;
+        
+        try {
+            st = conexion.prepareStatement(Query);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            st.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 

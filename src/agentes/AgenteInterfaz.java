@@ -26,14 +26,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -67,13 +66,15 @@ public class AgenteInterfaz extends Agent {
     
     @Override
     protected void setup() {
+        
+        MySql.Conectar();
+        
         System.out.println("Agente Interfaz corriendo");
         
-        ventanaPrincipal.ingresarSalonButton.setVisible(false);
         ventanaPrincipal.ingresarSistemaButton.setVisible(false);
         ventanaPrincipal.setVisible(true);
         
-        setFrames();
+        setFramePrincipal();
         
         ventanaPrincipal.labelMensaje.setText("Reconociendo...");
         
@@ -102,7 +103,6 @@ public class AgenteInterfaz extends Agent {
                             Reconocimiento reconocimiento = enviar.getReconocimiento();
                             usuario = reconocimiento.getUsuario();
 
-                            ventanaPrincipal.ingresarSalonButton.setVisible(true);
                             ventanaPrincipal.ingresarSistemaButton.setVisible(true);
                             ventanaPrincipal.labelMensaje.setText("Usuario reconocido: " + usuario.getNombre());
                         }
@@ -128,7 +128,7 @@ public class AgenteInterfaz extends Agent {
         }
     };
     
-    private void setFrames() {
+    private void setFramePrincipal() {
         ventanaPrincipal.registrarUsuarioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -146,41 +146,79 @@ public class AgenteInterfaz extends Agent {
             public void actionPerformed(ActionEvent evt) {
                 ingresarSistemaButtonActionPerformed(evt);
             }
-        });   
-        
-        ventanaRegistrarUsuario.volverButton.addActionListener(volverButtonActionListener);
-        ventanaSistema.volverButton.addActionListener(volverButtonActionListener);
-        ventanaIngresarSalon.volverButton.addActionListener(volverButtonActionListener);
-        
-        setRegistrarUsuarioFrame();
+        });    
     }
 
-    private void registrarUsuarioButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                       
-        ventanaPrincipal.setVisible(false);
+    private void registrarUsuarioButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+        // close main window
+        ventanaPrincipal.dispose();
+        
+        // restart window
+        ventanaRegistrarUsuario.getContentPane().removeAll();
+        ventanaRegistrarUsuario.myInitComponents();
+        
+        // set window
         ventanaRegistrarUsuario.setVisible(true);
-        ventanaRegistrarUsuario.mensajeLabel.setText("<html>Ingrese los datos y luego<br/>de click en Registrar Rostro</html>");
+        setRegistrarUsuarioFrame();
+        
     }                                                      
 
     private void ingresarSistemaButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                      
-        ventanaPrincipal.setVisible(false);
+        // close main window
+        ventanaPrincipal.dispose();
+        
+        // restart window
+        ventanaSistema.getContentPane().removeAll();
+        ventanaSistema.myInitComponents();
+        
+        // set window
         ventanaSistema.setVisible(true);
         setSistemaFrame();
     }                                                     
 
-    private void ingresarSalonButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
-        ventanaPrincipal.setVisible(false);
+    private void ingresarSalonButtonActionPerformed(java.awt.event.ActionEvent evt) {      
+        // close main window
+        ventanaPrincipal.dispose();
+        
+        // restart window
+        ventanaIngresarSalon.getContentPane().removeAll();
+        ventanaIngresarSalon.myInitComponents();
+        
+        // set window
         ventanaIngresarSalon.setVisible(true);
+        setIngresarSalonFrame();
     }
     
     private void volverButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         ventanaPrincipal.setVisible(true);
         
-        ventanaIngresarSalon.setVisible(false);
-        ventanaSistema.setVisible(false);
-        ventanaRegistrarUsuario.setVisible(false);
+        ventanaIngresarSalon.dispose();
+        ventanaSistema.dispose();
+        ventanaRegistrarUsuario.dispose();
     }
     
     private void setRegistrarUsuarioFrame() {
+        
+        ResultSet facultades = null;
+        
+        ventanaRegistrarUsuario.volverButton.addActionListener(volverButtonActionListener);
+        ventanaRegistrarUsuario.mensajeLabel.setText("<html>Ingrese los datos y luego de click en Registrar Rostro</html>");
+        
+        String getFacultades = "SELECT nombre from facultad";
+        facultades = MySql.ejecutarQuery(getFacultades);
+        final DefaultComboBoxModel modelFacultades = new DefaultComboBoxModel();
+        ventanaRegistrarUsuario.facultadInput.setModel(modelFacultades);
+        
+        if ( facultades != null ) {
+            try {
+                while(facultades.next()) {
+                    modelFacultades.addElement(facultades.getString(1));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
        
         ventanaRegistrarUsuario.registrarRostroButton.addActionListener(new ActionListener() {
             @Override
@@ -197,7 +235,7 @@ public class AgenteInterfaz extends Agent {
                     ventanaRegistrarUsuario.registrarRostroButton.setEnabled(false);
                     registrarRostro(cedula);
                 } else {
-                    ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes<br/>de registrar el rostro.</html>");  
+                    ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes de registrar el rostro.</html>");  
                 }
             }
         }); 
@@ -215,13 +253,13 @@ public class AgenteInterfaz extends Agent {
                 
                 if ( nombre.length() > 0 && role.length() > 0 && facultad.length() > 0 ) {
                     ventanaRegistrarUsuario.mensajeLabel.setText("Registrando usuario...");
-                    String Query = "INSERT INTO usuario VALUES ("+cedula+",'"+nombre+"','"+role+"','"+facultad+"')";
-                    MySql.Conectar();
-                    MySql.ejecutar(Query);
+                    String insertarUsuarioQuery = "INSERT INTO usuario VALUES ("+cedula+",'"+nombre+"','"+role+"','"+facultad+"')";
+                    
+                    MySql.ejecutarUpdate(insertarUsuarioQuery);
                     ventanaRegistrarUsuario.dispose();
                     ventanaPrincipal.setVisible(true);
                 } else {
-                    ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes<br/>de registrar el rostro.</html>");  
+                    ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes de registrar el rostro.</html>");  
                 }
             }
         }); 
@@ -296,6 +334,8 @@ public class AgenteInterfaz extends Agent {
     
     private void setSistemaFrame() {
         
+        ventanaSistema.volverButton.addActionListener(volverButtonActionListener);
+        
         Facultad facultad = new Facultad();
         facultad.setNombre("Minas");
         
@@ -355,6 +395,24 @@ public class AgenteInterfaz extends Agent {
             ((DefaultTableModel)table.getModel()).removeRow(modelRow);
         }
     };
- 
     
+    private void setIngresarSalonFrame() {
+        ventanaIngresarSalon.volverButton.addActionListener(volverButtonActionListener);
+        
+        ResultSet facultades = null;
+        String getFacultades = "SELECT nombre from facultad";
+        facultades = MySql.ejecutarQuery(getFacultades);
+        final DefaultComboBoxModel modelFacultades = new DefaultComboBoxModel();
+        ventanaIngresarSalon.facultadInput.setModel(modelFacultades);
+        
+        if ( facultades != null ) {
+            try {
+                while(facultades.next()) {
+                    modelFacultades.addElement(facultades.getString(1));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }   
 }

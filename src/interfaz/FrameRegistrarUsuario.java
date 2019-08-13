@@ -100,7 +100,7 @@ public class FrameRegistrarUsuario extends javax.swing.JFrame {
 
         mensajeLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         mensajeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        mensajeLabel.setText("<html>Ingrese los datos y luego<br/>de click en Registrar Rostro</html>");
+        mensajeLabel.setText("<html>Ingrese los datos y luego de click en Registrar Rostro</html>");
 
         jLabel6.setText("Cedula");
 
@@ -166,7 +166,7 @@ public class FrameRegistrarUsuario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(progresoRegistrarRostro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mensajeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(mensajeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registrarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
