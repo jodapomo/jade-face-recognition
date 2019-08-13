@@ -39,6 +39,15 @@ import ontology.Usuario;
  */
 public class AgenteReconocimiento extends Agent {
     
+    //RUTA JOSE
+    //portatil
+    //String rutaPython = "C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py";
+    //pc
+    String rutaPython = "D:\\Documentos\\jade-face-recognition\\py";
+    // RUTA ANDRES
+    //String rutaPython = "\\home\\andres\\jade-face-recognition\\py";
+    //String rutaPython = "home/andres/jade-face-recognition/py";
+    
     private final Codec codec = new SLCodec();
     private final Ontology ontologia = FaceRecognitionOntology.getInstance();
     
@@ -99,10 +108,7 @@ public class AgenteReconocimiento extends Agent {
 
         try {           
             ProcessBuilder pb = new ProcessBuilder("python", "reconocimiento2.py");
-//            PORTATIL
-//            pb.directory(new File("C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py"));
-//            PC
-            pb.directory(new File("D:\\Documentos\\jade-face-recognition\\py"));
+            pb.directory(new File(rutaPython));
             Process p = pb.start();
             
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));

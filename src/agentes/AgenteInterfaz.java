@@ -63,6 +63,15 @@ import ontology.UsuarioLogueado;
  */
 public class AgenteInterfaz extends Agent {
     
+    //RUTA JOSE
+    //portatil
+    //String rutaPython = "C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py";
+    //pc
+    String rutaPython = "D:\\Documentos\\jade-face-recognition\\py";
+    // RUTA ANDRES
+    //String rutaPython = "\\home\\andres\\jade-face-recognition\\py";
+    //String rutaPython = "home/andres/jade-face-recognition/py";
+
     
     FramePrincipal ventanaPrincipal = new FramePrincipal();
     FrameIngresarSalon ventanaIngresarSalon = new FrameIngresarSalon();
@@ -329,13 +338,8 @@ public class AgenteInterfaz extends Agent {
         try {           
             ProcessBuilder pb = new ProcessBuilder("python", "capture.py", String.valueOf(id));
             
-            //RUTA JOSE
-            pb.directory(new File("C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py"));
-            //RUTA ANDRES
-            //pb.directory(new File("\\home\\andres\\jade-face-recognition\\py"));
-            //pb.directory(new File("home/andres/jade-face-recognition/py"));
-            
-            
+            pb.directory(new File(rutaPython));
+
             Process p = pb.start();
             
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
