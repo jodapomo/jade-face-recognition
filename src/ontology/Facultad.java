@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Facultad
 * @author ontology bean generator
-* @version 2019/08/12, 20:48:39
+* @version 2019/08/12, 23:38:50
 */
 public class Facultad implements Concept {
 

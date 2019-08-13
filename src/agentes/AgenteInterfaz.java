@@ -16,6 +16,7 @@ import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -37,13 +38,14 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import ontology.Asignacion;
+import ontology.EnviarRecomendacion;
 import ontology.EnviarReconocimiento;
 import ontology.FaceRecognitionOntology;
-import ontology.Facultad;
 import ontology.Horario;
+import ontology.Recomendacion;
 import ontology.Reconocimiento;
-import ontology.Salon;
 import ontology.Usuario;
+import ontology.UsuarioLogueado;
 
 
 /**
@@ -59,6 +61,7 @@ public class AgenteInterfaz extends Agent {
     FrameSistema ventanaSistema = new FrameSistema();
     
     private Usuario usuario;
+    private Recomendacion recomendacion;
     
     private final Codec codec = new SLCodec();
     private final Ontology ontologia = FaceRecognitionOntology.getInstance();
@@ -81,39 +84,27 @@ public class AgenteInterfaz extends Agent {
         getContentManager().registerLanguage(codec);
         getContentManager().registerOntology(ontologia);
         
-        this.addBehaviour(new ComportamientoEscucharReconocimiento());
+        this.addBehaviour(new ComportamientoEscucharMensajes());
     }
     
-    private class ComportamientoEscucharReconocimiento extends CyclicBehaviour {
-
+    private class ComportamientoEscucharMensajes extends CyclicBehaviour {
         @Override
         public void action() {
             MessageTemplate mt = MessageTemplate.and(
-                    MessageTemplate.MatchLanguage(codec.getName()),
-                    MessageTemplate.MatchOntology(ontologia.getName()));
+                MessageTemplate.MatchLanguage(codec.getName()),
+                MessageTemplate.MatchOntology(ontologia.getName()));
+            
             ACLMessage msg = myAgent.receive(mt);
+            
             if (msg != null) {
-
                 if (msg.getPerformative() == ACLMessage.INFORM) {
-
                     try {
                         ContentElement ce = getContentManager().extractContent(msg);
+                        
                         if (ce instanceof EnviarReconocimiento) {
-                            EnviarReconocimiento enviar = (EnviarReconocimiento) ce;
-                            Reconocimiento reconocimiento = enviar.getReconocimiento();
-                            
-                            if ( ( usuario == null ) || ( usuario.getCedula() != reconocimiento.getUsuario().getCedula() ) ) {
-                                usuario = reconocimiento.getUsuario();
-                                System.out.println(usuario.getNombre() + " se logueo.");
-                                ventanaPrincipal.ingresarSistemaButton.setVisible(true);
-                                ventanaPrincipal.labelMensaje.setText("<html>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() +"</html>");
-                                if ( ventanaSistema.isVisible()) {
-                                    ventanaPrincipal.setVisible(true);
-                                    ventanaSistema.dispose();
-                                }
-                            } else {
-                                System.out.println("Mismo usuario logueado.");
-                            }
+                            escucharReconocimiento(ce);
+                        } else if(ce instanceof EnviarRecomendacion) {
+                            escucharRecomendacion(ce);
                         }
                     } catch (Codec.CodecException | OntologyException ex) {
                         Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
@@ -125,10 +116,50 @@ public class AgenteInterfaz extends Agent {
         } 
     }
     
-    private boolean isUsuarioLogged() {
-        return usuario != null;
+    
+    private void escucharReconocimiento(ContentElement ce) {
+        EnviarReconocimiento enviar = (EnviarReconocimiento) ce;
+        Reconocimiento reconocimiento = enviar.getReconocimiento();
+
+        if ( ( usuario == null ) || ( usuario.getCedula() != reconocimiento.getUsuario().getCedula() ) ) {
+            usuario = reconocimiento.getUsuario();
+            System.out.println(usuario.getNombre() + " se logueo.");
+            ventanaPrincipal.ingresarSistemaButton.setVisible(true);
+            ventanaPrincipal.labelMensaje.setText("<html>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() +"</html>");
+            if ( ventanaSistema.isVisible()) {
+                ventanaPrincipal.setVisible(true);
+                ventanaSistema.dispose();
+            }
+            enviarNotificacionLogin();
+        } else {
+            System.out.println("Mismo usuario logueado.");
+        }
     }
     
+    private void escucharRecomendacion(ContentElement ce) {
+        EnviarRecomendacion enviar = (EnviarRecomendacion) ce;
+        recomendacion = enviar.getRecomendacion();
+    }
+    
+    private void enviarNotificacionLogin() {
+        try {
+            ACLMessage mensaje = new ACLMessage();
+            AID r = new AID();
+            r.setLocalName("Gestion");
+            mensaje.setSender(getAID());
+            mensaje.addReceiver(r);
+            mensaje.setLanguage(codec.getName());
+            mensaje.setOntology(ontologia.getName());
+            mensaje.setPerformative(ACLMessage.INFORM);
+            
+            UsuarioLogueado usuarioLogueado = new UsuarioLogueado();
+            usuarioLogueado.setUsuario(usuario);
+            getContentManager().fillContent(mensaje, usuarioLogueado);
+            send(mensaje);
+        } catch (Codec.CodecException | OntologyException ex) {
+            Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     ActionListener volverButtonActionListener = new ActionListener() {
         @Override
@@ -347,13 +378,18 @@ public class AgenteInterfaz extends Agent {
 
         Object[][] data = {};
         String[] head = {"Fecha", "Hora", "Bloque", "Número", "Facultad", "Acción"};
+        
         DefaultTableModel dmHorario = new DefaultTableModel(data, head);
-        
         fillHorarioDataModel(usuario.getHorario(), dmHorario);
-        
         ventanaSistema.horarioTable.setModel(dmHorario);
+        ButtonColumn buttonColumnCancelar = new ButtonColumn(ventanaSistema.horarioTable, cancelar, 5);
         
-        ButtonColumn buttonColumn = new ButtonColumn(ventanaSistema.horarioTable, cancelar, 5);
+        if ( recomendacion != null ) {
+            DefaultTableModel dmRecomendacion = new DefaultTableModel(data, head);
+            fillRecomendacionDataModel(recomendacion, dmRecomendacion);
+            ventanaSistema.recomendacionesTable.setModel(dmRecomendacion);
+            ButtonColumn buttonColumnReservar = new ButtonColumn(ventanaSistema.recomendacionesTable, cancelar, 5);
+        }
     }
     
     private void fillHorarioDataModel(Horario horario, DefaultTableModel dm ) {
@@ -370,6 +406,25 @@ public class AgenteInterfaz extends Agent {
                     Integer.toString(a.getSalon().getNumero()),
                     a.getSalon().getFacultad(),
                     "Cancelar"
+                };
+            dm.addRow(row);
+        }
+    }
+    
+    private void fillRecomendacionDataModel(Recomendacion recomendacion, DefaultTableModel dm ) {
+        
+        Object[] asignaciones = recomendacion.getAsignaciones().toArray();
+        
+        for (Object b : asignaciones) {
+            Asignacion a = (Asignacion) b;
+            String row[] = 
+                {
+                    a.getDia(),
+                    a.getHora(),
+                    Integer.toString(a.getSalon().getBloque()),
+                    Integer.toString(a.getSalon().getNumero()),
+                    a.getSalon().getFacultad(),
+                    "Reservar"
                 };
             dm.addRow(row);
         }

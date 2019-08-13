@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: SolicitarEntrada
 * @author ontology bean generator
-* @version 2019/08/12, 20:48:40
+* @version 2019/08/12, 23:38:50
 */
 public class SolicitarEntrada implements Predicate {
 

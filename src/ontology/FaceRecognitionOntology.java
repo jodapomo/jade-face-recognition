@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: FaceRecognitionOntology.java
  * @author ontology bean generator
- * @version 2019/08/12, 20:48:39
+ * @version 2019/08/12, 23:38:50
  */
 public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -23,6 +23,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
 
 
    // VOCABULARY
+    public static final String USUARIOLOGUEADO_USUARIO="usuario";
+    public static final String USUARIOLOGUEADO="UsuarioLogueado";
     public static final String CANCELARASIGNACION_ASIGNACION="asignacion";
     public static final String CANCELARASIGNACION_USUARIO="usuario";
     public static final String CANCELARASIGNACION="CancelarAsignacion";
@@ -33,8 +35,6 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String ASIGNARSALON_ASIGNACION="asignacion";
     public static final String ASIGNARSALON_USUARIO="usuario";
     public static final String ASIGNARSALON="AsignarSalon";
-    public static final String NUEVOUSUARIO_USUARIO="usuario";
-    public static final String NUEVOUSUARIO="NuevoUsuario";
     public static final String ENVIARRECOMENDACION_RECOMENDACION="recomendacion";
     public static final String ENVIARRECOMENDACION="EnviarRecomendacion";
     public static final String SOLICITARRECOMENDACION_USUARIO="usuario";
@@ -106,8 +106,6 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     add(solicitarRecomendacionSchema, ontology.SolicitarRecomendacion.class);
     PredicateSchema enviarRecomendacionSchema = new PredicateSchema(ENVIARRECOMENDACION);
     add(enviarRecomendacionSchema, ontology.EnviarRecomendacion.class);
-    PredicateSchema nuevoUsuarioSchema = new PredicateSchema(NUEVOUSUARIO);
-    add(nuevoUsuarioSchema, ontology.NuevoUsuario.class);
     PredicateSchema asignarSalonSchema = new PredicateSchema(ASIGNARSALON);
     add(asignarSalonSchema, ontology.AsignarSalon.class);
     PredicateSchema enviarReconocimientoSchema = new PredicateSchema(ENVIARRECONOCIMIENTO);
@@ -116,6 +114,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     add(salonAsignadoSchema, ontology.SalonAsignado.class);
     PredicateSchema cancelarAsignacionSchema = new PredicateSchema(CANCELARASIGNACION);
     add(cancelarAsignacionSchema, ontology.CancelarAsignacion.class);
+    PredicateSchema usuarioLogueadoSchema = new PredicateSchema(USUARIOLOGUEADO);
+    add(usuarioLogueadoSchema, ontology.UsuarioLogueado.class);
 
 
     // adding fields
@@ -142,13 +142,13 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     solicitarEntradaSchema.add(SOLICITARENTRADA_SALON, salonSchema, ObjectSchema.OPTIONAL);
     solicitarRecomendacionSchema.add(SOLICITARRECOMENDACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     enviarRecomendacionSchema.add(ENVIARRECOMENDACION_RECOMENDACION, recomendacionSchema, ObjectSchema.OPTIONAL);
-    nuevoUsuarioSchema.add(NUEVOUSUARIO_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     asignarSalonSchema.add(ASIGNARSALON_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     asignarSalonSchema.add(ASIGNARSALON_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
     enviarReconocimientoSchema.add(ENVIARRECONOCIMIENTO_RECONOCIMIENTO, reconocimientoSchema, ObjectSchema.OPTIONAL);
     salonAsignadoSchema.add(SALONASIGNADO_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
     cancelarAsignacionSchema.add(CANCELARASIGNACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     cancelarAsignacionSchema.add(CANCELARASIGNACION_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
+    usuarioLogueadoSchema.add(USUARIOLOGUEADO_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
 
     // adding name mappings
 

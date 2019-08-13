@@ -1,1 +1,1 @@
-print("reconocido=" + "1")
+print("reconocido=" + "2")

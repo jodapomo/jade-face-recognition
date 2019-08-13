@@ -50,7 +50,7 @@ public class AgenteReconocimiento extends Agent {
         getContentManager().registerLanguage(codec);
         getContentManager().registerOntology(ontologia);
         
-        addBehaviour(new ComportamientoEnviarReconocimiento(this, 4000));
+        addBehaviour(new ComportamientoEnviarReconocimiento(this, 6000));
     }
     
     
@@ -128,7 +128,7 @@ public class AgenteReconocimiento extends Agent {
             System.out.println("exception happened - here's what I know: ");
             e.printStackTrace();
         }
-        
+        System.out.println("Reconocido");
         return idReconocido;
     }
     
