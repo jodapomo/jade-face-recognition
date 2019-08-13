@@ -104,7 +104,7 @@ public class AgenteInterfaz extends Agent {
                             usuario = reconocimiento.getUsuario();
 
                             ventanaPrincipal.ingresarSistemaButton.setVisible(true);
-                            ventanaPrincipal.labelMensaje.setText("Usuario reconocido: " + usuario.getNombre());
+                            ventanaPrincipal.labelMensaje.setText("<html>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() +"</html>");
                         }
                     } catch (Codec.CodecException | OntologyException ex) {
                         Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
@@ -335,33 +335,12 @@ public class AgenteInterfaz extends Agent {
     private void setSistemaFrame() {
         
         ventanaSistema.volverButton.addActionListener(volverButtonActionListener);
-        
-        Facultad facultad = new Facultad();
-        facultad.setNombre("Minas");
-        
-        Salon salon = new Salon();
-        salon.setBloque(8);
-        salon.setFacultad(facultad);
-        salon.setNumero(201);
-        
-        Asignacion asignacion = new Asignacion();
-        asignacion.setUsuario(usuario);
-        asignacion.setDia("lunes");
-        asignacion.setHora("8-10");
-        asignacion.setSalon(salon);
-        
-        Horario horario = usuario.getHorario();
-        
-        horario.addAsignaciones(asignacion);
-        horario.addAsignaciones(asignacion);
-        horario.addAsignaciones(asignacion);
-        horario.addAsignaciones(asignacion);
-        
+
         Object[][] data = {};
         String[] head = {"Fecha", "Hora", "Bloque", "Número", "Facultad", "Acción"};
         DefaultTableModel dmHorario = new DefaultTableModel(data, head);
         
-        fillHorarioDataModel(horario, dmHorario);
+        fillHorarioDataModel(usuario.getHorario(), dmHorario);
         
         ventanaSistema.horarioTable.setModel(dmHorario);
         
@@ -380,7 +359,7 @@ public class AgenteInterfaz extends Agent {
                     a.getHora(),
                     Integer.toString(a.getSalon().getBloque()),
                     Integer.toString(a.getSalon().getNumero()),
-                    a.getSalon().getFacultad().getNombre(),
+                    a.getSalon().getFacultad(),
                     "Cancelar"
                 };
             dm.addRow(row);

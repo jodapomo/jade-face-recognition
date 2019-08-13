@@ -8,20 +8,9 @@ import jade.core.*;
 /**
 * Protege name: AsignarSalon
 * @author ontology bean generator
-* @version 2019/08/12, 00:32:33
+* @version 2019/08/12, 20:48:40
 */
 public class AsignarSalon implements Predicate {
-
-   /**
-* Protege name: asignacion
-   */
-   private Asignacion asignacion;
-   public void setAsignacion(Asignacion value) { 
-    this.asignacion=value;
-   }
-   public Asignacion getAsignacion() {
-     return this.asignacion;
-   }
 
    /**
 * Protege name: usuario
@@ -32,6 +21,17 @@ public class AsignarSalon implements Predicate {
    }
    public Usuario getUsuario() {
      return this.usuario;
+   }
+
+   /**
+* Protege name: asignacion
+   */
+   private Asignacion asignacion;
+   public void setAsignacion(Asignacion value) { 
+    this.asignacion=value;
+   }
+   public Asignacion getAsignacion() {
+     return this.asignacion;
    }
 
 }

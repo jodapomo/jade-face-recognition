@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: FaceRecognitionOntology.java
  * @author ontology bean generator
- * @version 2019/08/12, 00:32:33
+ * @version 2019/08/12, 20:48:39
  */
 public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -23,15 +23,15 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
 
 
    // VOCABULARY
-    public static final String CANCELARASIGNACION_USUARIO="usuario";
     public static final String CANCELARASIGNACION_ASIGNACION="asignacion";
+    public static final String CANCELARASIGNACION_USUARIO="usuario";
     public static final String CANCELARASIGNACION="CancelarAsignacion";
     public static final String SALONASIGNADO_ASIGNACION="asignacion";
     public static final String SALONASIGNADO="SalonAsignado";
     public static final String ENVIARRECONOCIMIENTO_RECONOCIMIENTO="reconocimiento";
     public static final String ENVIARRECONOCIMIENTO="EnviarReconocimiento";
-    public static final String ASIGNARSALON_USUARIO="usuario";
     public static final String ASIGNARSALON_ASIGNACION="asignacion";
+    public static final String ASIGNARSALON_USUARIO="usuario";
     public static final String ASIGNARSALON="AsignarSalon";
     public static final String NUEVOUSUARIO_USUARIO="usuario";
     public static final String NUEVOUSUARIO="NuevoUsuario";
@@ -46,8 +46,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String ASIGNACIONCANCELADA="AsignacionCancelada";
     public static final String ASIGNACION_SALON="salon";
     public static final String ASIGNACION_DIA="dia";
-    public static final String ASIGNACION_ID="id";
     public static final String ASIGNACION_HORA="hora";
+    public static final String ASIGNACION_ID="id";
     public static final String ASIGNACION_USUARIO="usuario";
     public static final String ASIGNACION="Asignacion";
     public static final String RECONOCIMIENTO_USUARIO="usuario";
@@ -59,9 +59,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String SALON="Salon";
     public static final String USUARIO_ROL="rol";
     public static final String USUARIO_HORARIO="horario";
-    public static final String USUARIO_ID="id";
-    public static final String USUARIO_NOMBRE="nombre";
     public static final String USUARIO_FACULTAD="facultad";
+    public static final String USUARIO_NOMBRE="nombre";
     public static final String USUARIO_CEDULA="cedula";
     public static final String USUARIO="Usuario";
     public static final String FACULTAD_NOMBRE="nombre";
@@ -124,19 +123,18 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     horarioSchema.add(HORARIO_ASIGNACIONES, asignacionSchema, 0, ObjectSchema.UNLIMITED);
     facultadSchema.add(FACULTAD_NOMBRE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_CEDULA, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
-    usuarioSchema.add(USUARIO_FACULTAD, facultadSchema, ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_NOMBRE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
-    usuarioSchema.add(USUARIO_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    usuarioSchema.add(USUARIO_FACULTAD, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_HORARIO, horarioSchema, ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_ROL, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     salonSchema.add(SALON_NUMERO, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     salonSchema.add(SALON_BLOQUE, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
-    salonSchema.add(SALON_FACULTAD, facultadSchema, ObjectSchema.OPTIONAL);
+    salonSchema.add(SALON_FACULTAD, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     salonSchema.add(SALON_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     reconocimientoSchema.add(RECONOCIMIENTO_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
-    asignacionSchema.add(ASIGNACION_HORA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    asignacionSchema.add(ASIGNACION_HORA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_DIA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_SALON, salonSchema, ObjectSchema.OPTIONAL);
     asignacionCanceladaSchema.add(ASIGNACIONCANCELADA_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
@@ -145,12 +143,12 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     solicitarRecomendacionSchema.add(SOLICITARRECOMENDACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     enviarRecomendacionSchema.add(ENVIARRECOMENDACION_RECOMENDACION, recomendacionSchema, ObjectSchema.OPTIONAL);
     nuevoUsuarioSchema.add(NUEVOUSUARIO_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
-    asignarSalonSchema.add(ASIGNARSALON_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
     asignarSalonSchema.add(ASIGNARSALON_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
+    asignarSalonSchema.add(ASIGNARSALON_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
     enviarReconocimientoSchema.add(ENVIARRECONOCIMIENTO_RECONOCIMIENTO, reconocimientoSchema, ObjectSchema.OPTIONAL);
     salonAsignadoSchema.add(SALONASIGNADO_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
-    cancelarAsignacionSchema.add(CANCELARASIGNACION_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
     cancelarAsignacionSchema.add(CANCELARASIGNACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
+    cancelarAsignacionSchema.add(CANCELARASIGNACION_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
 
     // adding name mappings
 

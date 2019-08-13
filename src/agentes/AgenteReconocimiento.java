@@ -5,6 +5,7 @@
  */
 package agentes;
 
+import bd.MySql;
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
@@ -19,13 +20,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
+import ontology.Asignacion;
 import ontology.EnviarReconocimiento;
 import ontology.FaceRecognitionOntology;
 import ontology.Horario;
 import ontology.Reconocimiento;
+import ontology.Salon;
 import ontology.Usuario;
 
 /**
@@ -39,7 +44,7 @@ public class AgenteReconocimiento extends Agent {
     
     @Override
     protected void setup(){
-        
+        MySql.Conectar();
         System.out.println("Agente Reconocimiento corriendo");
         
         getContentManager().registerLanguage(codec);
@@ -60,10 +65,12 @@ public class AgenteReconocimiento extends Agent {
         @Override
         protected void onTick() {
             try {
-                System.out.println("Agente Reconocimiento activo el reconocimiento");
+                System.out.println("Agente Reconocimiento activó el reconocimiento");
                 
-                //String idUsuario = reconocerRostro();
-                String idUsuario = "1";
+                //String cedula = reconocerRostro();
+                String cedula = "1";
+                Usuario usuario = getUsuarioDB(cedula);
+                
                 
                 ACLMessage mensaje = new ACLMessage();
                 AID r = new AID();
@@ -73,9 +80,7 @@ public class AgenteReconocimiento extends Agent {
                 mensaje.setLanguage(codec.getName());
                 mensaje.setOntology(ontologia.getName());
                 mensaje.setPerformative(ACLMessage.INFORM);
-                Usuario usuario = new Usuario();
-                usuario.setNombre(idUsuario);
-                usuario.setHorario(new Horario());
+
                 Reconocimiento reconocimiento = new Reconocimiento();
                 reconocimiento.setUsuario(usuario);
                 EnviarReconocimiento enviarReconocimiento = new EnviarReconocimiento();
@@ -125,5 +130,60 @@ public class AgenteReconocimiento extends Agent {
         }
         
         return idReconocido;
+    }
+    
+    private Usuario getUsuarioDB(String cedula) {
+        Usuario usuario = new Usuario();
+        Horario horario = new Horario();
+        
+        ResultSet usuariodb = null;
+        String getUsuario = "SELECT * from usuario WHERE cedula = "+ cedula;
+        usuariodb = MySql.ejecutarQuery(getUsuario);
+        
+        
+        if ( usuariodb != null ) {
+            try {
+                while(usuariodb.next()) {
+                    usuario.setCedula(usuariodb.getInt(1));
+                    usuario.setNombre(usuariodb.getString(2));
+                    usuario.setRol(usuariodb.getString(3));
+                    usuario.setFacultad(usuariodb.getString(4));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            ResultSet asignacionesdb = null;
+            String getAsignaciones = "SELECT asignacion.id, asignacion.dia, asignacion.hora, salon.bloque, salon.numero, salon.facultad "
+                    + "FROM asignacion "
+                    + "INNER JOIN salon ON asignacion.salon = salon.id "
+                    + "WHERE asignacion.usuario = " + cedula;
+            
+            asignacionesdb = MySql.ejecutarQuery(getAsignaciones);
+            
+            if ( asignacionesdb != null ) {
+                try {
+                    while(asignacionesdb.next()) {
+                        Salon salon = new Salon();
+                        Asignacion asignacion = new Asignacion();
+                        
+                        asignacion.setId(asignacionesdb.getInt(1));
+                        asignacion.setDia(asignacionesdb.getString(2));
+                        asignacion.setHora(asignacionesdb.getString(3));
+
+                        salon.setBloque(asignacionesdb.getInt(4));
+                        salon.setNumero(asignacionesdb.getInt(5));
+                        salon.setFacultad(asignacionesdb.getString(6));
+                     
+                        asignacion.setSalon(salon);
+                        horario.addAsignaciones(asignacion);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        usuario.setHorario(horario);
+        return usuario;
     }
 }
