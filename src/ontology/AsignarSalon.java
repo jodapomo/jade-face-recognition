@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: AsignarSalon
 * @author ontology bean generator
-* @version 2019/08/12, 23:38:50
+* @version 2019/08/13, 00:20:21
 */
 public class AsignarSalon implements Predicate {
 

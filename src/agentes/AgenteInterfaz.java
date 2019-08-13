@@ -390,6 +390,11 @@ public class AgenteInterfaz extends Agent {
             ventanaSistema.recomendacionesTable.setModel(dmRecomendacion);
             ButtonColumn buttonColumnReservar = new ButtonColumn(ventanaSistema.recomendacionesTable, cancelar, 5);
         }
+        
+        ventanaSistema.nombreLabel.setText(usuario.getNombre());
+        ventanaSistema.cedulaLabel.setText(Integer.toString(usuario.getCedula()));
+        ventanaSistema.rolLabel.setText(usuario.getRol());
+        ventanaSistema.facultadLabel.setText(usuario.getFacultad());
     }
     
     private void fillHorarioDataModel(Horario horario, DefaultTableModel dm ) {

@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: FaceRecognitionOntology.java
  * @author ontology bean generator
- * @version 2019/08/12, 23:38:50
+ * @version 2019/08/13, 00:20:21
  */
 public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -37,8 +37,6 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String ASIGNARSALON="AsignarSalon";
     public static final String ENVIARRECOMENDACION_RECOMENDACION="recomendacion";
     public static final String ENVIARRECOMENDACION="EnviarRecomendacion";
-    public static final String SOLICITARRECOMENDACION_USUARIO="usuario";
-    public static final String SOLICITARRECOMENDACION="SolicitarRecomendacion";
     public static final String SOLICITARENTRADA_SALON="salon";
     public static final String SOLICITARENTRADA_USUARIO="usuario";
     public static final String SOLICITARENTRADA="SolicitarEntrada";
@@ -102,8 +100,6 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     add(asignacionCanceladaSchema, ontology.AsignacionCancelada.class);
     PredicateSchema solicitarEntradaSchema = new PredicateSchema(SOLICITARENTRADA);
     add(solicitarEntradaSchema, ontology.SolicitarEntrada.class);
-    PredicateSchema solicitarRecomendacionSchema = new PredicateSchema(SOLICITARRECOMENDACION);
-    add(solicitarRecomendacionSchema, ontology.SolicitarRecomendacion.class);
     PredicateSchema enviarRecomendacionSchema = new PredicateSchema(ENVIARRECOMENDACION);
     add(enviarRecomendacionSchema, ontology.EnviarRecomendacion.class);
     PredicateSchema asignarSalonSchema = new PredicateSchema(ASIGNARSALON);
@@ -140,7 +136,6 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     asignacionCanceladaSchema.add(ASIGNACIONCANCELADA_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
     solicitarEntradaSchema.add(SOLICITARENTRADA_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     solicitarEntradaSchema.add(SOLICITARENTRADA_SALON, salonSchema, ObjectSchema.OPTIONAL);
-    solicitarRecomendacionSchema.add(SOLICITARRECOMENDACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     enviarRecomendacionSchema.add(ENVIARRECOMENDACION_RECOMENDACION, recomendacionSchema, ObjectSchema.OPTIONAL);
     asignarSalonSchema.add(ASIGNARSALON_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     asignarSalonSchema.add(ASIGNARSALON_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
