@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Usuario
 * @author ontology bean generator
-* @version 2019/08/13, 00:52:23
+* @version 2019/08/13, 11:18:27
 */
 public class Usuario implements Concept {
 
@@ -24,17 +24,6 @@ public class Usuario implements Concept {
    }
 
    /**
-* Protege name: nombre
-   */
-   private String nombre;
-   public void setNombre(String value) { 
-    this.nombre=value;
-   }
-   public String getNombre() {
-     return this.nombre;
-   }
-
-   /**
 * Protege name: facultad
    */
    private String facultad;
@@ -43,6 +32,17 @@ public class Usuario implements Concept {
    }
    public String getFacultad() {
      return this.facultad;
+   }
+
+   /**
+* Protege name: nombre
+   */
+   private String nombre;
+   public void setNombre(String value) { 
+    this.nombre=value;
+   }
+   public String getNombre() {
+     return this.nombre;
    }
 
    /**

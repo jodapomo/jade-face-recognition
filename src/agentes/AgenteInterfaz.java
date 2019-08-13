@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -43,6 +44,7 @@ import ontology.Asignacion;
 import ontology.AsignacionCancelada;
 import ontology.AsignarSalon;
 import ontology.CancelarAsignacion;
+import ontology.EnviarPermisoEntrada;
 import ontology.EnviarRecomendacion;
 import ontology.EnviarReconocimiento;
 import ontology.FaceRecognitionOntology;
@@ -50,6 +52,7 @@ import ontology.Horario;
 import ontology.Recomendacion;
 import ontology.Reconocimiento;
 import ontology.SalonAsignado;
+import ontology.SolicitarEntrada;
 import ontology.Usuario;
 import ontology.UsuarioLogueado;
 
@@ -118,6 +121,8 @@ public class AgenteInterfaz extends Agent {
                             manejarAsignacion(ce);
                         } else if(ce instanceof AsignacionCancelada) {
                             manejarCancelacion(ce);
+                        } else if(ce instanceof EnviarPermisoEntrada) {
+                            manejarPermisoEntrada(ce);
                         }
                     } catch (Codec.CodecException | OntologyException ex) {
                         Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
@@ -137,11 +142,12 @@ public class AgenteInterfaz extends Agent {
             usuario = reconocimiento.getUsuario();
             System.out.println(usuario.getNombre() + " se logueo.");
             ventanaPrincipal.ingresarSistemaButton.setVisible(true);
-            ventanaPrincipal.labelMensaje.setText("<html>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() +"</html>");
+            ventanaPrincipal.labelMensaje.setText("<html><div style='text-align: center;'>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() +"</div></html>");
             if ( ventanaSistema.isVisible()) {
                 ventanaPrincipal.setVisible(true);
                 ventanaSistema.dispose();
             }
+            updateIngresarSalonFrame();
             enviarNotificacionLogin();
         } else {
             System.out.println("Mismo usuario logueado.");
@@ -254,7 +260,7 @@ public class AgenteInterfaz extends Agent {
         ResultSet facultades = null;
         
         ventanaRegistrarUsuario.volverButton.addActionListener(volverButtonActionListener);
-        ventanaRegistrarUsuario.mensajeLabel.setText("<html>Ingrese los datos y luego de click en Registrar Rostro</html>");
+        ventanaRegistrarUsuario.mensajeLabel.setText("<html><div style='text-align: center;'>Ingrese los datos y luego de click en Registrar Rostro</div></html>");
         
         String getFacultades = "SELECT nombre from facultad";
         facultades = MySql.ejecutarQuery(getFacultades);
@@ -287,7 +293,7 @@ public class AgenteInterfaz extends Agent {
                     ventanaRegistrarUsuario.registrarRostroButton.setEnabled(false);
                     registrarRostro(cedula);
                 } else {
-                    ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes de registrar el rostro.</html>");  
+                    ventanaRegistrarUsuario.mensajeLabel.setText("<html><div style='text-align: center;'>Llene todos los campos antes de registrar el rostro.</div></html>");  
                 }
             }
         }); 
@@ -311,7 +317,7 @@ public class AgenteInterfaz extends Agent {
                     ventanaRegistrarUsuario.dispose();
                     ventanaPrincipal.setVisible(true);
                 } else {
-                    ventanaRegistrarUsuario.mensajeLabel.setText("<html>Llene todos los campos antes de registrar el rostro.</html>");  
+                    ventanaRegistrarUsuario.mensajeLabel.setText("<html><div style='text-align: center;'>Llene todos los campos antes de registrar el rostro.</div></html>");  
                 }
             }
         }); 
@@ -566,6 +572,11 @@ public class AgenteInterfaz extends Agent {
         
         return newAsignaciones;
     }
+    
+    private void updateIngresarSalonFrame() {
+        ventanaIngresarSalon.mensajeReconocimientoLabel.setText("<html><div style='text-align: center;'>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() + "</div></html>");
+        ventanaIngresarSalon.entrarButton.setEnabled(true);
+    }
 
     private void setIngresarSalonFrame() {
         ventanaIngresarSalon.volverButton.addActionListener(volverButtonActionListener);
@@ -585,5 +596,71 @@ public class AgenteInterfaz extends Agent {
                 Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }   
+        
+        if ( usuario != null ) {
+            ventanaIngresarSalon.mensajeReconocimientoLabel.setText("<html><div style='text-align: center;'>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() + "</div></html>");
+            ventanaIngresarSalon.entrarButton.setEnabled(true); 
+        }
+        
+        ventanaIngresarSalon.entrarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                Integer bloque = Integer.parseInt(ventanaIngresarSalon.bloqueInput.getText());
+                Integer numero = Integer.parseInt(ventanaIngresarSalon.numeroInput.getText());
+                String hora = ventanaIngresarSalon.horaInput.getText();
+                String facultad = (String) ventanaIngresarSalon.facultadInput.getSelectedItem();
+                String dia = (String) ventanaIngresarSalon.diaInput.getSelectedItem();
+
+                if ( facultad.length() > 0 && dia.length() > 0 && bloque > 0 && numero > 0 && hora.length() > 0 ) {
+                    try {
+                        ventanaIngresarSalon.mensajeLabel.setText("Solicitando entrada...");
+                        
+                        ACLMessage mensaje = new ACLMessage();
+                        AID r = new AID();
+                        r.setLocalName("Gestion");
+                        mensaje.setSender(getAID());
+                        mensaje.addReceiver(r);
+                        mensaje.setLanguage(codec.getName());
+                        mensaje.setOntology(ontologia.getName());
+                        mensaje.setPerformative(ACLMessage.REQUEST);
+                        
+                        SolicitarEntrada solicitar = new SolicitarEntrada();
+                        
+                        solicitar.setCedula(usuario.getCedula());
+                        solicitar.setBloque(bloque);
+                        solicitar.setDia(dia);
+                        solicitar.setFacultad(facultad);
+                        solicitar.setHora(hora);
+                        solicitar.setNumero(numero);
+                        getContentManager().fillContent(mensaje, solicitar);
+                        send(mensaje);
+                    } catch (Codec.CodecException | OntologyException ex) {
+                        ventanaIngresarSalon.mensajeLabel.setText("Error solicitando entrada.");
+                        Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    ventanaIngresarSalon.mensajeLabel.setText("<html><div style='text-align: center;'>Llene todos los campos antes de intentar entrar.</div></html>");  
+                }
+            }
+        });
+        
+    }
+    
+    private void manejarPermisoEntrada(ContentElement ce) {
+        EnviarPermisoEntrada permiso = (EnviarPermisoEntrada) ce;
+        
+        if ( permiso.getPermitido()  ) {
+            ventanaIngresarSalon.mensajeLabel.setText("Entrada permitida.");
+            JOptionPane.showMessageDialog(null, "Entrada permitida. Puede ingresar al salón.");
+            ventanaIngresarSalon.dispose();
+            ventanaPrincipal.setVisible(true);
+        } else {
+            ventanaIngresarSalon.bloqueInput.setText("");
+            ventanaIngresarSalon.numeroInput.setText("");
+            ventanaIngresarSalon.horaInput.setText("");
+            ventanaIngresarSalon.facultadInput.setSelectedItem(-1);
+            ventanaIngresarSalon.diaInput.setSelectedItem(-1);
+            ventanaIngresarSalon.mensajeLabel.setText("<html><div style='text-align: center;'>Entrada no permitida para este salón.</div></html>"); 
+        }
+    }
 }

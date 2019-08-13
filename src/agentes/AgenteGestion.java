@@ -23,11 +23,13 @@ import ontology.Asignacion;
 import ontology.AsignacionCancelada;
 import ontology.AsignarSalon;
 import ontology.CancelarAsignacion;
+import ontology.EnviarPermisoEntrada;
 import ontology.EnviarRecomendacion;
 import ontology.FaceRecognitionOntology;
 import ontology.Recomendacion;
 import ontology.Salon;
 import ontology.SalonAsignado;
+import ontology.SolicitarEntrada;
 import ontology.Usuario;
 import ontology.UsuarioLogueado;
 
@@ -78,6 +80,8 @@ public class AgenteGestion extends Agent {
                             escucharAsignarSalon(ce, msg);
                         } else if (ce instanceof CancelarAsignacion) {
                             escucharCancelarAsignacion(ce, msg);
+                        } else if (ce instanceof SolicitarEntrada) {
+                            escucharSolicitarEntrada(ce, msg);
                         }
                     } catch (Codec.CodecException | OntologyException ex) {
                         Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,7 +103,52 @@ public class AgenteGestion extends Agent {
         CancelarAsignacion enviar = (CancelarAsignacion) ce;
         cancelarAsignacion(enviar.getIdAsignacion(), msg);
     }
-    
+    private void  escucharSolicitarEntrada(ContentElement ce, ACLMessage msg) {
+        SolicitarEntrada solicitud = (SolicitarEntrada) ce;
+        
+        try {
+            ACLMessage reply = msg.createReply();
+            reply.setSender(getAID());
+            reply.setLanguage(codec.getName());
+            reply.setOntology(ontologia.getName());
+            reply.setPerformative(ACLMessage.INFORM);
+            
+            EnviarPermisoEntrada permiso = new EnviarPermisoEntrada();
+            permiso.setPermitido(false);
+            
+            ResultSet asignaciondb = null;
+            String getAsignacion = "SELECT * "
+                    + "FROM asignacion "
+                    + "INNER JOIN salon ON asignacion.salon = salon.id "
+                    + "WHERE asignacion.usuario = " + solicitud.getCedula()
+                    + " AND asignacion.hora = " + solicitud.getHora()
+                    + " AND asignacion.dia = '" + solicitud.getDia() + "'"
+                    + " AND salon.numero = " + solicitud.getNumero()
+                    + " AND salon.bloque = " + solicitud.getBloque()
+                    + " AND salon.facultad = '" + solicitud.getFacultad() + "'";
+            
+            asignaciondb = MySql.ejecutarQuery(getAsignacion);
+            
+            if ( asignaciondb != null ) {
+                try {
+                    while(asignaciondb.next()) {
+                        
+                        if( asignaciondb.getInt(1) > 0) {
+                            permiso.setPermitido(true);
+                        }
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            getContentManager().fillContent(reply, permiso);
+            send(reply);
+        } catch (Codec.CodecException ex) {
+            Logger.getLogger(AgenteGestion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (OntologyException ex) {
+            Logger.getLogger(AgenteGestion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void asignarSalon(int cedula, int idAsignacion, ACLMessage msg) {
         try {
             ACLMessage reply = msg.createReply();

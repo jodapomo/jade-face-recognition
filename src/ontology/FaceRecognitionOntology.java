@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: FaceRecognitionOntology.java
  * @author ontology bean generator
- * @version 2019/08/13, 00:52:23
+ * @version 2019/08/13, 11:18:27
  */
 public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -35,17 +35,23 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String ASIGNARSALON_IDASIGNACION="idAsignacion";
     public static final String ASIGNARSALON_CEDULA="cedula";
     public static final String ASIGNARSALON="AsignarSalon";
+    public static final String ENVIARPERMISOENTRADA_PERMITIDO="permitido";
+    public static final String ENVIARPERMISOENTRADA="EnviarPermisoEntrada";
     public static final String ENVIARRECOMENDACION_RECOMENDACION="recomendacion";
     public static final String ENVIARRECOMENDACION="EnviarRecomendacion";
-    public static final String SOLICITARENTRADA_SALON="salon";
-    public static final String SOLICITARENTRADA_USUARIO="usuario";
+    public static final String SOLICITARENTRADA_DIA="dia";
+    public static final String SOLICITARENTRADA_HORA="hora";
+    public static final String SOLICITARENTRADA_FACULTAD="facultad";
+    public static final String SOLICITARENTRADA_BLOQUE="bloque";
+    public static final String SOLICITARENTRADA_CEDULA="cedula";
+    public static final String SOLICITARENTRADA_NUMERO="numero";
     public static final String SOLICITARENTRADA="SolicitarEntrada";
     public static final String ASIGNACIONCANCELADA_ASIGNACION="asignacion";
     public static final String ASIGNACIONCANCELADA="AsignacionCancelada";
     public static final String ASIGNACION_SALON="salon";
     public static final String ASIGNACION_DIA="dia";
-    public static final String ASIGNACION_HORA="hora";
     public static final String ASIGNACION_ID="id";
+    public static final String ASIGNACION_HORA="hora";
     public static final String ASIGNACION_USUARIO="usuario";
     public static final String ASIGNACION="Asignacion";
     public static final String RECONOCIMIENTO_USUARIO="usuario";
@@ -57,8 +63,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     public static final String SALON="Salon";
     public static final String USUARIO_ROL="rol";
     public static final String USUARIO_HORARIO="horario";
-    public static final String USUARIO_FACULTAD="facultad";
     public static final String USUARIO_NOMBRE="nombre";
+    public static final String USUARIO_FACULTAD="facultad";
     public static final String USUARIO_CEDULA="cedula";
     public static final String USUARIO="Usuario";
     public static final String FACULTAD_NOMBRE="nombre";
@@ -102,6 +108,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     add(solicitarEntradaSchema, ontology.SolicitarEntrada.class);
     PredicateSchema enviarRecomendacionSchema = new PredicateSchema(ENVIARRECOMENDACION);
     add(enviarRecomendacionSchema, ontology.EnviarRecomendacion.class);
+    PredicateSchema enviarPermisoEntradaSchema = new PredicateSchema(ENVIARPERMISOENTRADA);
+    add(enviarPermisoEntradaSchema, ontology.EnviarPermisoEntrada.class);
     PredicateSchema asignarSalonSchema = new PredicateSchema(ASIGNARSALON);
     add(asignarSalonSchema, ontology.AsignarSalon.class);
     PredicateSchema enviarReconocimientoSchema = new PredicateSchema(ENVIARRECONOCIMIENTO);
@@ -119,8 +127,8 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     horarioSchema.add(HORARIO_ASIGNACIONES, asignacionSchema, 0, ObjectSchema.UNLIMITED);
     facultadSchema.add(FACULTAD_NOMBRE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_CEDULA, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
-    usuarioSchema.add(USUARIO_NOMBRE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_FACULTAD, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    usuarioSchema.add(USUARIO_NOMBRE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_HORARIO, horarioSchema, ObjectSchema.OPTIONAL);
     usuarioSchema.add(USUARIO_ROL, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     salonSchema.add(SALON_NUMERO, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
@@ -129,14 +137,19 @@ public class FaceRecognitionOntology extends jade.content.onto.Ontology  {
     salonSchema.add(SALON_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     reconocimientoSchema.add(RECONOCIMIENTO_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
-    asignacionSchema.add(ASIGNACION_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_HORA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    asignacionSchema.add(ASIGNACION_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_DIA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     asignacionSchema.add(ASIGNACION_SALON, salonSchema, ObjectSchema.OPTIONAL);
     asignacionCanceladaSchema.add(ASIGNACIONCANCELADA_ASIGNACION, asignacionSchema, ObjectSchema.OPTIONAL);
-    solicitarEntradaSchema.add(SOLICITARENTRADA_USUARIO, usuarioSchema, ObjectSchema.OPTIONAL);
-    solicitarEntradaSchema.add(SOLICITARENTRADA_SALON, salonSchema, ObjectSchema.OPTIONAL);
+    solicitarEntradaSchema.add(SOLICITARENTRADA_NUMERO, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    solicitarEntradaSchema.add(SOLICITARENTRADA_CEDULA, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    solicitarEntradaSchema.add(SOLICITARENTRADA_BLOQUE, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
+    solicitarEntradaSchema.add(SOLICITARENTRADA_FACULTAD, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    solicitarEntradaSchema.add(SOLICITARENTRADA_HORA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    solicitarEntradaSchema.add(SOLICITARENTRADA_DIA, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     enviarRecomendacionSchema.add(ENVIARRECOMENDACION_RECOMENDACION, recomendacionSchema, ObjectSchema.OPTIONAL);
+    enviarPermisoEntradaSchema.add(ENVIARPERMISOENTRADA_PERMITIDO, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.OPTIONAL);
     asignarSalonSchema.add(ASIGNARSALON_CEDULA, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     asignarSalonSchema.add(ASIGNARSALON_IDASIGNACION, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.OPTIONAL);
     enviarReconocimientoSchema.add(ENVIARRECONOCIMIENTO_RECONOCIMIENTO, reconocimientoSchema, ObjectSchema.OPTIONAL);

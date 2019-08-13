@@ -8,30 +8,74 @@ import jade.core.*;
 /**
 * Protege name: SolicitarEntrada
 * @author ontology bean generator
-* @version 2019/08/13, 00:52:23
+* @version 2019/08/13, 11:18:27
 */
 public class SolicitarEntrada implements Predicate {
 
    /**
-* Protege name: usuario
+* Protege name: numero
    */
-   private Usuario usuario;
-   public void setUsuario(Usuario value) { 
-    this.usuario=value;
+   private int numero;
+   public void setNumero(int value) { 
+    this.numero=value;
    }
-   public Usuario getUsuario() {
-     return this.usuario;
+   public int getNumero() {
+     return this.numero;
    }
 
    /**
-* Protege name: salon
+* Protege name: cedula
    */
-   private Salon salon;
-   public void setSalon(Salon value) { 
-    this.salon=value;
+   private int cedula;
+   public void setCedula(int value) { 
+    this.cedula=value;
    }
-   public Salon getSalon() {
-     return this.salon;
+   public int getCedula() {
+     return this.cedula;
+   }
+
+   /**
+* Protege name: bloque
+   */
+   private int bloque;
+   public void setBloque(int value) { 
+    this.bloque=value;
+   }
+   public int getBloque() {
+     return this.bloque;
+   }
+
+   /**
+* Protege name: facultad
+   */
+   private String facultad;
+   public void setFacultad(String value) { 
+    this.facultad=value;
+   }
+   public String getFacultad() {
+     return this.facultad;
+   }
+
+   /**
+* Protege name: hora
+   */
+   private String hora;
+   public void setHora(String value) { 
+    this.hora=value;
+   }
+   public String getHora() {
+     return this.hora;
+   }
+
+   /**
+* Protege name: dia
+   */
+   private String dia;
+   public void setDia(String value) { 
+    this.dia=value;
+   }
+   public String getDia() {
+     return this.dia;
    }
 
 }

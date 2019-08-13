@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Salon
 * @author ontology bean generator
-* @version 2019/08/13, 00:52:23
+* @version 2019/08/13, 11:18:27
 */
 public class Salon implements Concept {
 
