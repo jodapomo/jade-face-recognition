@@ -101,10 +101,19 @@ public class AgenteInterfaz extends Agent {
                         if (ce instanceof EnviarReconocimiento) {
                             EnviarReconocimiento enviar = (EnviarReconocimiento) ce;
                             Reconocimiento reconocimiento = enviar.getReconocimiento();
-                            usuario = reconocimiento.getUsuario();
-
-                            ventanaPrincipal.ingresarSistemaButton.setVisible(true);
-                            ventanaPrincipal.labelMensaje.setText("<html>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() +"</html>");
+                            
+                            if ( ( usuario == null ) || ( usuario.getCedula() != reconocimiento.getUsuario().getCedula() ) ) {
+                                usuario = reconocimiento.getUsuario();
+                                System.out.println(usuario.getNombre() + " se logueo.");
+                                ventanaPrincipal.ingresarSistemaButton.setVisible(true);
+                                ventanaPrincipal.labelMensaje.setText("<html>Usuario reconocido: " + usuario.getNombre() + " Cédula: " + usuario.getCedula() +"</html>");
+                                if ( ventanaSistema.isVisible()) {
+                                    ventanaPrincipal.setVisible(true);
+                                    ventanaSistema.dispose();
+                                }
+                            } else {
+                                System.out.println("Mismo usuario logueado.");
+                            }
                         }
                     } catch (Codec.CodecException | OntologyException ex) {
                         Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);

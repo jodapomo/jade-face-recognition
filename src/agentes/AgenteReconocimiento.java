@@ -67,10 +67,8 @@ public class AgenteReconocimiento extends Agent {
             try {
                 System.out.println("Agente Reconocimiento activó el reconocimiento");
                 
-                //String cedula = reconocerRostro();
-                String cedula = "1";
+                String cedula = reconocerRostro();
                 Usuario usuario = getUsuarioDB(cedula);
-                
                 
                 ACLMessage mensaje = new ACLMessage();
                 AID r = new AID();
@@ -92,8 +90,7 @@ public class AgenteReconocimiento extends Agent {
             }
         }
     }
-    
-    
+
     private String reconocerRostro() {
         System.out.println("Reconociendo...");
         String s = null;
@@ -101,8 +98,11 @@ public class AgenteReconocimiento extends Agent {
         String idReconocido = null;
 
         try {           
-            ProcessBuilder pb = new ProcessBuilder("python", "reconocimiento.py");
-            pb.directory(new File("C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py"));
+            ProcessBuilder pb = new ProcessBuilder("python", "reconocimiento2.py");
+//            PORTATIL
+//            pb.directory(new File("C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py"));
+//            PC
+            pb.directory(new File("D:\\Documentos\\jade-face-recognition\\py"));
             Process p = pb.start();
             
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
