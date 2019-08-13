@@ -61,5 +61,10 @@ INSERT INTO asignacion VALUES (2,'Lunes',8,1,2);
 INSERT INTO asignacion VALUES (3,'Lunes',10,1,3);
 INSERT INTO asignacion VALUES (4,'Lunes',12,1,1);
 
+INSERT INTO asignacion VALUES (NULL,'Martes',6,1,NULL);
+INSERT INTO asignacion VALUES (NULL,'Miércoles',8,2,NULL);
+INSERT INTO asignacion VALUES (NULL,'Jueves',10,3,NULL);
+INSERT INTO asignacion VALUES (NULL,'Viernes',12,3,NULL);
+
 
 
