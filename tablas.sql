@@ -65,6 +65,3 @@ INSERT INTO asignacion VALUES (NULL,'Martes',6,1,NULL);
 INSERT INTO asignacion VALUES (NULL,'Miércoles',8,2,NULL);
 INSERT INTO asignacion VALUES (NULL,'Jueves',10,3,NULL);
 INSERT INTO asignacion VALUES (NULL,'Viernes',12,3,NULL);
-
-
-

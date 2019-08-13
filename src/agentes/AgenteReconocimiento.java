@@ -41,9 +41,9 @@ public class AgenteReconocimiento extends Agent {
     
     //RUTA JOSE
     //portatil
-    //String rutaPython = "C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py";
+    String rutaPython = "C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py";
     //pc
-    String rutaPython = "D:\\Documentos\\jade-face-recognition\\py";
+//    String rutaPython = "D:\\Documentos\\jade-face-recognition\\py";
     // RUTA ANDRES
     //String rutaPython = "\\home\\andres\\jade-face-recognition\\py";
     //String rutaPython = "home/andres/jade-face-recognition/py";
@@ -77,23 +77,28 @@ public class AgenteReconocimiento extends Agent {
                 System.out.println("Agente Reconocimiento activó el reconocimiento");
                 
                 String cedula = reconocerRostro();
-                Usuario usuario = getUsuarioDB(cedula);
-                
-                ACLMessage mensaje = new ACLMessage();
-                AID r = new AID();
-                r.setLocalName("Interfaz");
-                mensaje.setSender(getAID());
-                mensaje.addReceiver(r);
-                mensaje.setLanguage(codec.getName());
-                mensaje.setOntology(ontologia.getName());
-                mensaje.setPerformative(ACLMessage.INFORM);
 
-                Reconocimiento reconocimiento = new Reconocimiento();
-                reconocimiento.setUsuario(usuario);
-                EnviarReconocimiento enviarReconocimiento = new EnviarReconocimiento();
-                enviarReconocimiento.setReconocimiento(reconocimiento);
-                getContentManager().fillContent(mensaje, enviarReconocimiento);
-                send(mensaje);
+                if ( cedula != null ) {
+                    Usuario usuario = getUsuarioDB(cedula);
+                    if ( usuario != null ) {
+                        ACLMessage mensaje = new ACLMessage();
+                        AID r = new AID();
+                        r.setLocalName("Interfaz");
+                        mensaje.setSender(getAID());
+                        mensaje.addReceiver(r);
+                        mensaje.setLanguage(codec.getName());
+                        mensaje.setOntology(ontologia.getName());
+                        mensaje.setPerformative(ACLMessage.INFORM);
+
+                        Reconocimiento reconocimiento = new Reconocimiento();
+                        reconocimiento.setUsuario(usuario);
+                        EnviarReconocimiento enviarReconocimiento = new EnviarReconocimiento();
+                        enviarReconocimiento.setReconocimiento(reconocimiento);
+                        getContentManager().fillContent(mensaje, enviarReconocimiento);
+                        send(mensaje);
+                    }
+                }
+                
             } catch (Codec.CodecException | OntologyException ex) {
                 Logger.getLogger(AgenteReconocimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -107,7 +112,7 @@ public class AgenteReconocimiento extends Agent {
         String idReconocido = null;
 
         try {           
-            ProcessBuilder pb = new ProcessBuilder("python", "reconocimiento2.py");
+            ProcessBuilder pb = new ProcessBuilder("python", "reconocimiento.py");
             pb.directory(new File(rutaPython));
             Process p = pb.start();
             
@@ -132,9 +137,8 @@ public class AgenteReconocimiento extends Agent {
         }
         catch (IOException e) {
             System.out.println("exception happened - here's what I know: ");
-            e.printStackTrace();
         }
-        System.out.println("Reconocido");
+        System.out.println("Fin reconocimiento");
         return idReconocido;
     }
     
@@ -157,6 +161,12 @@ public class AgenteReconocimiento extends Agent {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(AgenteInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println(usuario.getCedula());
+            System.out.println(usuario.getNombre());
+            if (usuario.getCedula() <= 0 || usuario.getNombre() == null) {
+                return null;
             }
             
             ResultSet asignacionesdb = null;

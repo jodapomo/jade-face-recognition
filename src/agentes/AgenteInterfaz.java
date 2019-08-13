@@ -65,9 +65,9 @@ public class AgenteInterfaz extends Agent {
     
     //RUTA JOSE
     //portatil
-    //String rutaPython = "C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py";
+    String rutaPython = "C:\\Users\\USUARIO\\Documents\\jade-face-recognition\\py";
     //pc
-    String rutaPython = "D:\\Documentos\\jade-face-recognition\\py";
+//    String rutaPython = "D:\\Documentos\\jade-face-recognition\\py";
     // RUTA ANDRES
     //String rutaPython = "\\home\\andres\\jade-face-recognition\\py";
     //String rutaPython = "home/andres/jade-face-recognition/py";
